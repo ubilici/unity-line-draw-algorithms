@@ -2,9 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum DrawAlgorithm
+{
+    DirectDraw,
+    Bresenham
+}
+
 public class LineManager : MonoBehaviour
 {
     public Color lineColor;
+    public DrawAlgorithm drawAlgorithm;
 
     private List<Node> selectedNodes;
     private Node[,] nodes;
@@ -12,6 +19,14 @@ public class LineManager : MonoBehaviour
     void Start()
     {
         selectedNodes = new List<Node>();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            DrawTest();
+        }
     }
 
     public void SetNodeArray(Node[,] nodes)
@@ -33,13 +48,50 @@ public class LineManager : MonoBehaviour
             var x2 = endPoint.x;
             var y2 = endPoint.y;
 
-            DirectDraw(x1, x2, y1, y2);
+            switch (drawAlgorithm)
+            {
+                case DrawAlgorithm.DirectDraw:
+                    DirectDraw(x1, x2, y1, y2);
+                    break;
 
-            Bresenham(x1, x2, y1, y2);
+                case DrawAlgorithm.Bresenham:
+                    Bresenham(x1, x2, y1, y2);
+                    break;
+            }
             
             selectedNodes[0].SetColor(Color.black);
             selectedNodes.Clear();
         }
+    }
+
+    public void DrawTest()
+    {
+        int x1 = Random.Range(0, 10);
+        int y1 = Random.Range(0, 10);
+        int x2 = Random.Range(54, 64);
+        int y2 = Random.Range(54, 64);
+
+        Debug.Log("Draw lines between " + x1 + "," + y1 + " / " + x2 + "," + y2);
+
+        var watch1 = System.Diagnostics.Stopwatch.StartNew();
+        for (int i = 0; i < 5000; i++)
+        {
+            DirectDraw(x1, x2, y1, y2);
+        }
+        watch1.Stop();
+        var elapsedMs1 = watch1.ElapsedMilliseconds;
+
+        Debug.Log("Elapsed time for DirectDraw: " + elapsedMs1 + "ms.");
+
+        var watch2 = System.Diagnostics.Stopwatch.StartNew();
+        for (int i = 0; i < 5000; i++)
+        {
+            Bresenham(x1, x2, y1, y2);
+        }
+        watch2.Stop();
+        var elapsedMs2 = watch2.ElapsedMilliseconds;
+
+        Debug.Log("Elapsed time for Bresenham: " + elapsedMs2 + "ms.");
     }
 
     private void DirectDraw(int x1, int x2, int y1, int y2)
