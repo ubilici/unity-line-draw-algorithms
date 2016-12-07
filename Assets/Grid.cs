@@ -31,7 +31,8 @@ public class Grid : MonoBehaviour
                 var node = Instantiate(nodePrefab, transform).GetComponent<Node>();
                 node.transform.name = x + " " + y;
                 node.transform.position = currentPosition;
-                node.nodePosition = new Vector2(x, y);
+                node.x = x;
+                node.y = y;
                 nodes[x, y] = node;
                 currentPosition.x += distanceBetweenNodes;
             }

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    public Vector2 nodePosition;
+    public int x;
+    public int y;
 
     void OnMouseDown()
     {
