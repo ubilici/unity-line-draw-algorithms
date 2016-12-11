@@ -44,4 +44,9 @@ public class UIManager : MonoBehaviour
     {
         testResults.text = lineManager.DrawTest();
     }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
 }
