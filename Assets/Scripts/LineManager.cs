@@ -13,6 +13,7 @@ public class LineManager : MonoBehaviour
     public Color lineColor;
     public DrawAlgorithm drawAlgorithm;
 
+    private Vector2 gridSize;
     private List<Node> selectedNodes;
     private Node[,] nodes;
 
@@ -32,6 +33,24 @@ public class LineManager : MonoBehaviour
     public void SetNodeArray(Node[,] nodes)
     {
         this.nodes = nodes;
+    }
+
+    public void SetGridSize(Vector2 gridSize)
+    {
+        this.gridSize = gridSize;
+    }
+
+    public void SetDrawAlgorithm(int value)
+    {
+        switch (value)
+        {
+            case 0:
+                drawAlgorithm = DrawAlgorithm.DirectDraw;
+                break;
+            case 1:
+                drawAlgorithm = DrawAlgorithm.Bresenham;
+                break;
+        }
     }
 
     public void SelectNode(Node node)
@@ -60,18 +79,33 @@ public class LineManager : MonoBehaviour
             }
             
             selectedNodes[0].SetColor(Color.black);
-            selectedNodes.Clear();
+            ClearSelectedNodes();
         }
     }
 
-    public void DrawTest()
+    public void ClearSelectedNodes()
     {
-        int x1 = Random.Range(0, 10);
-        int y1 = Random.Range(0, 10);
-        int x2 = Random.Range(54, 64);
-        int y2 = Random.Range(54, 64);
+        selectedNodes.Clear();
+    }
 
-        Debug.Log("Draw lines between " + x1 + "," + y1 + " / " + x2 + "," + y2);
+    public string DrawTest()
+    {
+        int maxSizeX = Mathf.RoundToInt(gridSize.x);
+        int maxSizeY = Mathf.RoundToInt(gridSize.y);
+
+        if(maxSizeX < 12 || maxSizeY < 12)
+        {
+            return "Grid size should be bigger than 12 * 12 to be tested";
+        }
+
+        int x1 = 0;
+        int y1 = 0;
+        int x2 = Random.Range(maxSizeX - 10, maxSizeX);
+        int y2 = Random.Range(maxSizeY - 10, maxSizeY);
+
+        string testResult;
+
+        //testResult = "Draw lines between " + x1 + "," + y1 + " / " + x2 + "," + y2 + "\n";
 
         var watch1 = System.Diagnostics.Stopwatch.StartNew();
         for (int i = 0; i < 5000; i++)
@@ -81,7 +115,7 @@ public class LineManager : MonoBehaviour
         watch1.Stop();
         var elapsedMs1 = watch1.ElapsedMilliseconds;
 
-        Debug.Log("Elapsed time for DirectDraw: " + elapsedMs1 + "ms.");
+        testResult = "Elapsed time for DirectDraw: " + elapsedMs1 + "ms.\n\n";
 
         var watch2 = System.Diagnostics.Stopwatch.StartNew();
         for (int i = 0; i < 5000; i++)
@@ -91,7 +125,9 @@ public class LineManager : MonoBehaviour
         watch2.Stop();
         var elapsedMs2 = watch2.ElapsedMilliseconds;
 
-        Debug.Log("Elapsed time for Bresenham: " + elapsedMs2 + "ms.");
+        testResult += "Elapsed time for Bresenham: " + elapsedMs2 + "ms.\n";
+
+        return testResult;
     }
 
     private void DirectDraw(int x1, int x2, int y1, int y2)
