@@ -25,7 +25,7 @@ public class UIManager : MonoBehaviour
             int x, y;
             if (int.TryParse(sizeX.text, out x) && int.TryParse(sizeY.text, out y))
             {
-                gridManager.CreateGrid(new Vector2(x, y));
+                gridManager.CreateGrid(new IntVector2(x, y));
             }
         }
     }

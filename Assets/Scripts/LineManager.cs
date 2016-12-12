@@ -13,7 +13,7 @@ public class LineManager : MonoBehaviour
     public Color lineColor;
     public DrawAlgorithm drawAlgorithm;
 
-    private Vector2 gridSize;
+    private IntVector2 gridSize;
     private List<Node> selectedNodes;
     private Node[,] nodes;
 
@@ -35,7 +35,7 @@ public class LineManager : MonoBehaviour
         this.nodes = nodes;
     }
 
-    public void SetGridSize(Vector2 gridSize)
+    public void SetGridSize(IntVector2 gridSize)
     {
         this.gridSize = gridSize;
     }
@@ -90,8 +90,8 @@ public class LineManager : MonoBehaviour
 
     public string DrawTest()
     {
-        int maxSizeX = Mathf.RoundToInt(gridSize.x);
-        int maxSizeY = Mathf.RoundToInt(gridSize.y);
+        int maxSizeX = gridSize.x;
+        int maxSizeY = gridSize.y;
 
         if(maxSizeX < 12 || maxSizeY < 12)
         {

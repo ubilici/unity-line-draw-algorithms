@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    public Vector2 gridSize;
+    public IntVector2 gridSize;
     public float distanceBetweenNodes;
     public GameObject nodePrefab;
 
@@ -17,10 +17,17 @@ public class GridManager : MonoBehaviour
         lineManager = FindObjectOfType<LineManager>();
         mainCamera = FindObjectOfType<Camera>();
         gridGenerated = false;
+
+        NewGrid();
     }
 
-    public void CreateGrid(Vector2 gridSize)
+    public void CreateGrid(IntVector2 gridSize)
     {
+        if (gridSize.x < 3 && gridSize.y < 3)
+        {
+            return;
+        }
+
         DeleteCurrentGrid();
         this.gridSize = gridSize;
         NewGrid();
